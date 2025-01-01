@@ -16,7 +16,6 @@ enum ThemeEnum {
   System = "System",
 }
 
-
 // mapping the icons with the theme style
 const themeIcons: Record<ThemeEnum, string> = {
   [ThemeEnum.Dark]: "🌙",
@@ -25,6 +24,9 @@ const themeIcons: Record<ThemeEnum, string> = {
 };
 
 const getDefaultTheme = (): ThemeEnum => {
+  if (typeof window === "undefined") {
+    return ThemeEnum.Light;
+  }
   const savedTheme = localStorage.getItem("theme") as ThemeEnum;
   return (
     savedTheme ||
@@ -36,7 +38,7 @@ const getDefaultTheme = (): ThemeEnum => {
 
 export default function Themes({
   borders = true,
-  dropdownOn = true,
+  dropdownOn = false,
 }: {
   borders?: boolean;
   dropdownOn?: boolean;
@@ -76,7 +78,9 @@ export default function Themes({
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className={`rounded-lg ${borders ? " dark:border-white" : "border-none"}`}
+          className={`rounded-lg ${
+            borders ? " dark:border-white" : "border-none"
+          }`}
         >
           {themeIcons[theme]}
         </Button>
